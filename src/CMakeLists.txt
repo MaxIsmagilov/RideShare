@@ -9,7 +9,6 @@ set(RideShare_Impl
     )
 
 add_library(RideShare_Objects OBJECT
-    ${RideShare_Headers}
     ${RideShare_Impl}
     )
 
@@ -27,9 +26,11 @@ set_target_properties(RideShare PROPERTIES
     CXX_EXTENSIONS NO
     CXX_STANDARD 23
     CXX_STANDARD_REQUIRED YES
-    COMPILE_OPTIONS "-Wall -Wextra -Wpedantic -Werror"
+    COMPILE_OPTIONS "-Wall -Wextra -Wpedantic -Werror -std=c++23"
     PUBLIC_HEADER "${RideShare_Headers}"
     )
+
+target_compile_options(RideShare PRIVATE "-std=c++23")
 
 include(GNUInstallDirs)
 

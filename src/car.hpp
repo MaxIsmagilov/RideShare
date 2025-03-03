@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+#include <ranges>
 #include <vector>
 
 #include "passenger.hpp"
@@ -37,7 +39,11 @@ class Car
   /// @param p a passenger
   void add_passenger(Passenger p) noexcept;
 
-  /// @brief drops off all passengers.
+  /// @brief drops off all passengers
+  /// @return a vector of all the passengers in the car
+  std::vector<Passenger> drop_off() noexcept;
+
+  /// @brief drops off all correct passengers.
   /// basically just removes all passengers with the correct station
   /// from the Car and returns them
   /// @param station_number
