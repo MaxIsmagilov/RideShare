@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace RideShare
 {
 
@@ -17,6 +19,10 @@ class Passenger
   /// @brief gets the destination for the passenger
   /// @return the intended destination
   int get_destination() const noexcept;
+
+  /// @brief string representation of the passenger
+  /// @return the address and the destination
+  std::string to_string() const noexcept;
 
  private:
   int m_destination;

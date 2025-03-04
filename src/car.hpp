@@ -50,8 +50,25 @@ class Car
   /// @return a vector of passengers
   std::vector<Passenger> drop_off(int station_number) noexcept;
 
+  /// @brief logs a move
+  void log_move() noexcept;
+
+  /// @brief gets the revenue
+  /// @return the number of passenger-miles driven
+  int get_revenue() noexcept;
+
+  /// @brief gets the miles driven
+  /// @return the miles driven
+  int get_driven() noexcept;
+
+  /// @brief gets the average revenue
+  /// @return the average revenue in passengers
+  double get_avg_revenue() noexcept;
+
  private:
   int                    m_destination;
+  int                    passenger_miles{0};
+  int                    miles_driven{0};
   std::vector<Passenger> m_seats;
 };
 
