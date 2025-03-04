@@ -1,19 +1,21 @@
 #include <iostream>
 
 #include "car.hpp"
+#include "station.hpp"
 
 int main() {
   RideShare::Car c{3};
 
-  c.add_passenger(RideShare::Passenger{5});
-  c.add_passenger(RideShare::Passenger{2});
-  c.add_passenger(RideShare::Passenger{2});
+  c.add_passenger(2);
+  c.add_passenger(1);
+  c.add_passenger(3);
 
-  auto q = c.drop_off(2);
+  RideShare::Station s{1};
 
-  std::cout << "here\n";
+  s.add_car(c);
+  s.free_all();
 
-  for (auto&& a : q) {
-    std::cout << &a << '\n';
-  }
+  (void)s.unload_all();
+
+  std::cout << s.to_str() << '\n';
 }

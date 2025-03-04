@@ -46,14 +46,72 @@ void Station::transfer(Station& other) noexcept {
       }
     }
   });
-  std::ranges::remove_if(m_cars, [](std::tuple<Car, STATUS>& t) -> bool { return std::get<1>(t) == STATUS::MOVED; });
+  auto rem = std::ranges::remove_if(m_cars,
+                                    [](std::tuple<Car, STATUS>& t) -> bool { return std::get<1>(t) == STATUS::MOVED; });
+  m_cars.erase(rem.begin(), rem.end());
 }
 
 void Station::add_car(Car c) noexcept { m_cars.push_back(std::make_tuple<Car, STATUS>(Car(c), STATUS::LOCKED)); }
 
+void Station::add_waiting(Passenger p) noexcept { m_waiting.push_back(p); }
+
 void Station::clean_all() noexcept {
-  std::ranges::remove_if(m_cars,
-                         [&](std::tuple<Car, STATUS>& t) -> bool { return std::get<0>(t).get_destination() == m_id; });
+  auto rem = std::ranges::remove_if(
+      m_cars, [&](std::tuple<Car, STATUS>& t) -> bool { return std::get<0>(t).get_destination() == m_id; });
+  m_cars.erase(rem.begin(), rem.end());
+}
+
+void Station::load_all() noexcept {
+  auto direction = [&](int destination) -> int {
+    if (destination > m_id)
+      return 1;
+    else if (destination < m_id)
+      return -1;
+    else
+      return 0;
+  };
+  // assign in the remove statement copy to the cars and then remove
+  auto rem = std::ranges::remove_if(m_waiting, [&](Passenger& p) -> bool {
+    if (p.get_destination() == m_id) {
+      return true;
+    }
+    for (auto&& a : m_cars) {
+      auto&& c = std::get<0>(a);
+      if (c.space_available() && direction(c.get_destination()) == direction(p.get_destination())) {
+        c.add_passenger(p);
+        return true;
+      }
+    }
+    return false;
+  });
+  m_waiting.erase(rem.begin(), rem.end());
+}
+
+std::string Station::to_str() const noexcept {
+  std::string ret  = "Station_" + std::to_string(m_id) + "  [\n";
+  auto        stat = [&](STATUS s) -> std::string {
+    switch (s) {
+      case STATUS::FREED:
+        return "FREED";
+      case STATUS::LOCKED:
+        return "LOCKED";
+      case STATUS::MOVED:
+        return "MOVED";
+      default:
+        return "No status";
+    }
+  };
+  std::ranges::for_each(m_cars,
+                        [&](auto& a) { ret += std::get<0>(a).to_str() + " <- " + stat(std::get<1>(a)) + "\n"; });
+  return ret + "]";
+}
+
+bool Station::is_empty() const noexcept { return (m_cars.size() == 0); }
+
+int Station::passengers_loaded() const noexcept {
+  int acc{0};
+  std::ranges::for_each(m_cars, [&](const std::tuple<Car, STATUS>& t) { acc += std::get<0>(t).get_passenger_count(); });
+  return acc;
 }
 
 }  // namespace RideShare

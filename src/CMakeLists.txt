@@ -2,15 +2,18 @@ set(RideShare_Headers
     passenger.hpp
     car.hpp
     station.hpp
+    road.hpp
     )
 
 set(RideShare_Impl
     passenger.cpp
     car.cpp
     station.cpp
+    road.cpp
     )
 
 add_library(RideShare_Objects OBJECT
+    ${RideShare_Headers}    
     ${RideShare_Impl}
     )
 

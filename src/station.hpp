@@ -44,13 +44,32 @@ class Station
   /// @param c a car to add
   void add_car(Car c) noexcept;
 
+  /// @brief adds a passenger to wait
+  /// @param p the passenger
+  void add_waiting(Passenger p) noexcept;
+
   /// @brief removes all cars that have arrived
   void clean_all() noexcept;
+
+  /// @brief assigns passengers to new cars
+  void load_all() noexcept;
+
+  /// @brief string representation of the station
+  /// @return
+  std::string to_str() const noexcept;
+
+  /// @brief checks if the station has no cars
+  /// @return whether cars are present
+  bool is_empty() const noexcept;
+
+  /// @brief gets the number of passengers loaded in all the cars
+  /// @return an integer count
+  int passengers_loaded() const noexcept;
 
  private:
   enum class STATUS : int { FREED = 0, LOCKED = 1, MOVED = 2 };
 
-  int m_id;
+  int m_id{};
 
   std::vector<std::tuple<Car, STATUS>> m_cars;
   std::vector<Passenger>               m_waiting;

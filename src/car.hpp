@@ -53,22 +53,16 @@ class Car
   /// @brief logs a move
   void log_move() noexcept;
 
-  /// @brief gets the revenue
+  /// @brief gets the number of passengers
   /// @return the number of passenger-miles driven
-  int get_revenue() noexcept;
+  int get_passenger_count() const noexcept;
 
-  /// @brief gets the miles driven
-  /// @return the miles driven
-  int get_driven() noexcept;
-
-  /// @brief gets the average revenue
-  /// @return the average revenue in passengers
-  double get_avg_revenue() noexcept;
+  /// @brief string representation of Car
+  /// @return a string
+  std::string to_str() const noexcept;
 
  private:
   int                    m_destination;
-  int                    passenger_miles{0};
-  int                    miles_driven{0};
   std::vector<Passenger> m_seats;
 };
 

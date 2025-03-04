@@ -22,7 +22,7 @@ class Passenger
 
   /// @brief string representation of the passenger
   /// @return the address and the destination
-  std::string to_string() const noexcept;
+  std::string to_str() const noexcept;
 
  private:
   int m_destination;

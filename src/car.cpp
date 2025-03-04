@@ -1,6 +1,3 @@
-#include <algorithm>
-#include <ranges>
-
 #include "car.hpp"
 
 namespace RideShare
@@ -24,17 +21,18 @@ std::vector<Passenger> Car::drop_off() noexcept {
 std::vector<Passenger> Car::drop_off(int station_number) noexcept {
   std::vector<Passenger> dropped_off{};
   auto arrive_lambda = [station_number](Passenger& p) -> bool { return p.get_destination() == station_number; };
-  std::ranges::copy_if(m_seats, std::back_inserter(dropped_off), arrive_lambda);
-  std::ranges::remove_if(m_seats, arrive_lambda);
+  auto rem           = std::ranges::remove_if(m_seats, arrive_lambda);
+  std::ranges::copy(rem, std::back_inserter(dropped_off));
+  m_seats.erase(rem.begin(), rem.end());
   return dropped_off;
 }
 
-void Car::log_move() noexcept { passenger_miles += static_cast<int>(m_seats.size()); }
+int Car::get_passenger_count() const noexcept { return m_seats.size(); }
 
-int Car::get_revenue() noexcept { return passenger_miles; }
-
-int Car::get_driven() noexcept { return miles_driven; }
-
-double Car::get_avg_revenue() noexcept { return static_cast<double>(passenger_miles) / miles_driven; }
+std::string Car::to_str() const noexcept {
+  std::string res = "Car[ ";
+  std::ranges::for_each(m_seats, [&](const Passenger& p) { res += p.to_str() + ","; });
+  return res + " ]";
+}
 
 }  // namespace RideShare
