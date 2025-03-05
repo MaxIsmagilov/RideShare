@@ -20,7 +20,7 @@ std::vector<Passenger> Car::drop_off() noexcept {
 
 std::vector<Passenger> Car::drop_off(int station_number) noexcept {
   std::vector<Passenger> dropped_off{};
-  auto arrive_lambda = [station_number](Passenger& p) -> bool { return p.get_destination() == station_number; };
+  auto arrive_lambda = [station_number](const Passenger& p) -> bool { return p.get_destination() == station_number; };
   auto rem           = std::ranges::remove_if(m_seats, arrive_lambda);
   std::ranges::copy(rem, std::back_inserter(dropped_off));
   m_seats.erase(rem.begin(), rem.end());

@@ -66,6 +66,10 @@ class Station
   /// @return an integer count
   int passengers_loaded() const noexcept;
 
+  /// @brief gets the number of cars
+  /// @return an integer count
+  int num_cars() const noexcept;
+
  private:
   enum class STATUS : int { FREED = 0, LOCKED = 1, MOVED = 2 };
 

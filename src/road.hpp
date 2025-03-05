@@ -1,6 +1,8 @@
 #pragma once
 
+#include <iostream>
 #include <numeric>
+#include <random>
 
 #include "car.hpp"
 #include "passenger.hpp"
@@ -34,11 +36,33 @@ class Road
   /// @param dest the station to try to get to
   void add_waiting(int pos, int dest) noexcept;
 
+  /// @brief finds if there are no cars left
+  /// @return if there are no cars left
+  bool is_done() const noexcept;
+
+  /// @brief describes the passenger information (miles, passenger-miles, avg)
+  /// @return a string
+  std::string pass_info() const noexcept;
+
+  /// @brief string representation of the road
+  /// @return a string
+  std::string to_str() const noexcept;
+
+  /// @brief generates a random passenger
+  /// @param len the maximum station
+  /// @return a passenger
+  static Passenger random_passenger(int len) noexcept;
+
+  /// @brief generates a random car
+  /// @param len the maximum station
+  /// @return a car
+  static Car random_car(int len) noexcept;
+
  private:
   std::vector<Station> m_stations{};
 
-  int miles_travelled{0};
-  int passenger_miles{0};
+  uint64_t m_miles_travelled{0};
+  uint64_t m_passenger_miles{0};
 };
 
 }  // namespace RideShare

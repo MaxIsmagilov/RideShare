@@ -25,9 +25,9 @@ std::vector<Passenger> Station::unload_all() noexcept {
       if (c.get_destination() == m_id) {
         auto passengers = c.drop_off();
         std::ranges::copy_if(passengers, std::back_inserter(unloading),
-                             [&](Passenger& p) -> bool { return p.get_destination() == m_id; });
+                             [&](const Passenger& p) -> bool { return p.get_destination() == m_id; });
         std::ranges::copy_if(passengers, std::back_inserter(m_waiting),
-                             [&](Passenger& p) -> bool { return p.get_destination() != m_id; });
+                             [&](const Passenger& p) -> bool { return p.get_destination() != m_id; });
       } else {
         std::ranges::copy(std::get<0>(t).drop_off(m_id), std::back_inserter(unloading));
       }
@@ -46,8 +46,8 @@ void Station::transfer(Station& other) noexcept {
       }
     }
   });
-  auto rem = std::ranges::remove_if(m_cars,
-                                    [](std::tuple<Car, STATUS>& t) -> bool { return std::get<1>(t) == STATUS::MOVED; });
+  auto rem = std::ranges::remove_if(
+      m_cars, [](const std::tuple<Car, STATUS>& t) -> bool { return std::get<1>(t) == STATUS::MOVED; });
   m_cars.erase(rem.begin(), rem.end());
 }
 
@@ -57,7 +57,7 @@ void Station::add_waiting(Passenger p) noexcept { m_waiting.push_back(p); }
 
 void Station::clean_all() noexcept {
   auto rem = std::ranges::remove_if(
-      m_cars, [&](std::tuple<Car, STATUS>& t) -> bool { return std::get<0>(t).get_destination() == m_id; });
+      m_cars, [&](const std::tuple<Car, STATUS>& t) -> bool { return std::get<0>(t).get_destination() == m_id; });
   m_cars.erase(rem.begin(), rem.end());
 }
 
@@ -71,7 +71,7 @@ void Station::load_all() noexcept {
       return 0;
   };
   // assign in the remove statement copy to the cars and then remove
-  auto rem = std::ranges::remove_if(m_waiting, [&](Passenger& p) -> bool {
+  auto rem = std::ranges::remove_if(m_waiting, [&](const Passenger& p) -> bool {
     if (p.get_destination() == m_id) {
       return true;
     }
@@ -88,7 +88,7 @@ void Station::load_all() noexcept {
 }
 
 std::string Station::to_str() const noexcept {
-  std::string ret  = "Station_" + std::to_string(m_id) + "  [\n";
+  std::string ret  = "Station_" + std::to_string(m_id) + "  {\n";
   auto        stat = [&](STATUS s) -> std::string {
     switch (s) {
       case STATUS::FREED:
@@ -101,9 +101,12 @@ std::string Station::to_str() const noexcept {
         return "No status";
     }
   };
+  ret += "CARS:\n";
   std::ranges::for_each(m_cars,
                         [&](auto& a) { ret += std::get<0>(a).to_str() + " <- " + stat(std::get<1>(a)) + "\n"; });
-  return ret + "]";
+  ret += "WAITING:\n";
+  std::ranges::for_each(m_waiting, [&](auto& a) { ret += a.to_str() + "\n"; });
+  return ret + "}";
 }
 
 bool Station::is_empty() const noexcept { return (m_cars.size() == 0); }
@@ -113,5 +116,7 @@ int Station::passengers_loaded() const noexcept {
   std::ranges::for_each(m_cars, [&](const std::tuple<Car, STATUS>& t) { acc += std::get<0>(t).get_passenger_count(); });
   return acc;
 }
+
+int Station::num_cars() const noexcept { return static_cast<int>(m_cars.size()); }
 
 }  // namespace RideShare
