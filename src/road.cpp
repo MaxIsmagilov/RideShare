@@ -55,6 +55,16 @@ std::string Road::to_str() const noexcept {
   return ret;
 }
 
+void Road::clean() noexcept {
+  std::ranges::for_each(m_stations, [](Station& s) { s.clean_all(); });
+}
+
+uint64_t Road::car_count() const noexcept {
+  uint64_t ct{0};
+  std::ranges::for_each(m_stations, [&ct](const Station& s) { ct += s.num_cars(); });
+  return ct;
+}
+
 Passenger Road::random_passenger(int len) noexcept {
   std::random_device                                       dev;
   std::mt19937                                             rng(dev());

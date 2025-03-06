@@ -48,6 +48,13 @@ class Road
   /// @return a string
   std::string to_str() const noexcept;
 
+  /// @brief clean all stations; removing unecessary cars
+  void clean() noexcept;
+
+  /// @brief gets the number of cars on the road
+  /// @return an unsigned 64 bit int
+  uint64_t car_count() const noexcept;
+
   /// @brief generates a random passenger
   /// @param len the maximum station
   /// @return a passenger
