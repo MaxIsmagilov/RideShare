@@ -3,15 +3,16 @@
 #include "car.hpp"
 #include "road.hpp"
 #include "station.hpp"
+#include "threaded_road.hpp"
 
 int main() {
-  constexpr uint64_t STATIONS               = 6400;
-  constexpr uint64_t CARS_PER_STATION       = 2000;
-  constexpr uint64_t PASSENGERS_PER_STATION = 5000;
+  constexpr uint64_t STATIONS               = 10;
+  constexpr uint64_t CARS_PER_STATION       = 50;
+  constexpr uint64_t PASSENGERS_PER_STATION = 125;
 
   std::cout << "Initiallizing Road\n";
 
-  RideShare::Road r{STATIONS};
+  RideShare::ThreadedRoad r{STATIONS, 4};
 
   std::random_device                                       dev;
   std::mt19937                                             rng(dev());
@@ -33,7 +34,7 @@ int main() {
 
   for (uint64_t i = 0; !r.is_done(); ++i) {
     std::cout << "\titeration=" << i + 1 << "\t(with " << r.car_count() << " cars)\n";
-    r.move(RideShare::Road::OUTPUT_TYPE::SUPPRESS);
+    r.move();
   }
 
   std::cout << "Simulation Done\n\nInfo:\n";

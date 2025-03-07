@@ -3,6 +3,9 @@ set(RideShare_Headers
     car.hpp
     station.hpp
     road.hpp
+    thread_pool.hpp
+    threaded_road_chunk.hpp
+    threaded_road.hpp
     )
 
 set(RideShare_Impl
@@ -10,6 +13,9 @@ set(RideShare_Impl
     car.cpp
     station.cpp
     road.cpp
+    thread_pool.cpp
+    threaded_road_chunk.cpp
+    threaded_road.cpp
     )
 
 add_library(RideShare_Objects OBJECT

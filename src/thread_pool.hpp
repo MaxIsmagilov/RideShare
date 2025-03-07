@@ -41,8 +41,8 @@ class ThreadPool
 
  public:
   template <typename F, typename... Params>
-  std::future<std::any> queue(F&& f, Params&&... args) {
-    std::packaged_task<std::any()> p(std::bind(std::forward<F>(f), std::forward<Params>(args)...));
+  std::future<void> queue(F&& f, Params&&... args) {
+    std::packaged_task<void()> p(std::bind(std::forward<F>(f), std::forward<Params>(args)...));
 
     auto r = p.get_future();
 
