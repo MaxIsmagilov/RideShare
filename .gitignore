@@ -34,5 +34,3 @@
 #vscode and build
 build/
 .vscode/
-
-src/thread_*
