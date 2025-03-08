@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "threaded_road.hpp"
 
 namespace RideShare
@@ -7,7 +9,7 @@ ThreadedRoad::ThreadedRoad(int size, int thread_count) noexcept : m_thread_count
   if (thread_count < size) m_thread_count = 1;
   std::vector<int> positions{};
   int              slice_len = size / thread_count;
-  for (int i = 0; i < size && positions.size() < thread_count; ++i) {
+  for (int i = 0; i < size && positions.size() <= thread_count; ++i) {
     if (i % slice_len == 0) positions.push_back(i);
   }
   for (int i = 0; i < positions.size() - 1; ++i) {
@@ -37,9 +39,10 @@ void ThreadedRoad::move() noexcept {
 void ThreadedRoad::add_car(int pos, Car cr) noexcept {
   int cur_pos = pos;
   for (auto&& c : m_chunks) {
-    if (c->get_size() < cur_pos)
+    if (c->get_size() > cur_pos) {
       c->add_car(cur_pos, cr);
-    else
+      break;
+    } else
       cur_pos -= c->get_size();
   }
 }
@@ -47,9 +50,10 @@ void ThreadedRoad::add_car(int pos, Car cr) noexcept {
 void ThreadedRoad::add_waiting(int pos, int dest) noexcept {
   int cur_pos = pos;
   for (auto&& c : m_chunks) {
-    if (c->get_size() < cur_pos)
+    if (c->get_size() > cur_pos) {
       c->add_waiting(cur_pos, dest);
-    else
+      break;
+    } else
       cur_pos -= c->get_size();
   }
 }

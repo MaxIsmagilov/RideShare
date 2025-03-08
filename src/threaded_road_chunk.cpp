@@ -64,17 +64,9 @@ std::string ThreadedRoadChunk::to_str() const noexcept {
   return ret;
 }
 
-Station& ThreadedRoadChunk::left() noexcept {
-  m_lock.lock();
-  return std::forward<Station&>(m_stations.front());
-  m_lock.unlock();
-}
+Station& ThreadedRoadChunk::left() noexcept { return std::forward<Station&>(m_stations.front()); }
 
-Station& ThreadedRoadChunk::right() noexcept {
-  m_lock.lock();
-  return std::forward<Station&>(m_stations.back());
-  m_lock.unlock();
-}
+Station& ThreadedRoadChunk::right() noexcept { return std::forward<Station&>(m_stations.back()); }
 
 uint64_t ThreadedRoadChunk::car_count() const noexcept {
   uint64_t ct{0};

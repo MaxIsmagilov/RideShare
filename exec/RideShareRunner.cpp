@@ -6,13 +6,13 @@
 #include "threaded_road.hpp"
 
 int main() {
-  constexpr uint64_t STATIONS               = 10;
-  constexpr uint64_t CARS_PER_STATION       = 50;
-  constexpr uint64_t PASSENGERS_PER_STATION = 125;
+  constexpr uint64_t STATIONS               = 100;
+  constexpr uint64_t CARS_PER_STATION       = 100;
+  constexpr uint64_t PASSENGERS_PER_STATION = 100;
 
   std::cout << "Initiallizing Road\n";
 
-  RideShare::ThreadedRoad r{STATIONS, 4};
+  RideShare::ThreadedRoad r{STATIONS, 6};
 
   std::random_device                                       dev;
   std::mt19937                                             rng(dev());
